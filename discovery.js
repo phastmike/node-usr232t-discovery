@@ -25,9 +25,10 @@ function Discovery() {
     this.devices_found = [];
     server_udp = dgram.createSocket('udp4');
 
+    // Extend Array
     Array.prototype.contains = function(obj) {
         var i = this.length;
-        console.log ("CONTAINS CHECK for: " + obj.getMacAddressAsString() + " - " + obj.getIpAddressAsString() + ":" + obj.getPortAsString());
+
         while (i--) {
             if (this[i].getMacAddressAsString () == obj.getMacAddressAsString ()) {
                 return true;
@@ -71,6 +72,7 @@ Discovery.prototype.scanDevices = function () {
         if (err) throw err;
         console.log('UDP message sent ' + bytes + ' bytes to ' + BROADCAST_ADDR +':'+ PORT_UDP);
     });
+
     server_udp.send(message, 0, message.length-1, PORT_UDP, BROADCAST_ADDR, (err, bytes) => {
         if (err) throw err;
         console.log('UDP message sent ' + bytes + ' bytes to ' + BROADCAST_ADDR +':'+ PORT_UDP);
