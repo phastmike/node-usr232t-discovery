@@ -11,7 +11,7 @@
 var http = require('http');
 var server_web = undefined;
 var server_port = 0;
-var devices = undefined;
+var devices = [];
 
 function handleRequest(request, response) {
 	switch (request.url.toLowerCase()) {
