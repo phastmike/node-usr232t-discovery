@@ -36,6 +36,16 @@ function Discovery() {
         }
         return false;
     }
+
+    Array.prototype.getIndex = function(obj) {
+        var i = this.length;
+        while (i--) {
+            if (this[i].getMacAddressAsString () == obj.getMacAddressAsString ()) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }
 
 Util.inherits (Discovery, EventEmmiter);
@@ -51,7 +61,10 @@ Discovery.prototype.start = function () {
         if (message.length == 28 || message.length == 35) {
             let nugw = new Discoverable(remote.address, remote.port, message);
             if (this.devices_found.contains (nugw)) {
-                console.log ("Gateway already exists");
+                let index = this.devices_found.getIndex(nugw);
+                if (index != -1 && this.devices_found[index].isNewFirmware() == false && nugw.isNewFirmware()) {
+                    this.devices_found[index].raw = new Buffer.from(nugw.raw);
+                }
             } else {
                 this.devices_found.push (nugw);
                 console.log ('There are ' + this.devices_found.length + ' devices on the list');

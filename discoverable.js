@@ -42,3 +42,7 @@ Discoverable.prototype.getIpAddressAsString = function () {
 Discoverable.prototype.getPortAsString = function () {
 	return (this.raw[18] << 8) + this.raw[17];
 }
+
+Discoverable.prototype.isNewFirmware = function () {
+	return this.raw.length == 35;
+}

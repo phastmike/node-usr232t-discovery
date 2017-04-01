@@ -19,9 +19,14 @@ function handleRequest(request, response) {
 		case '/gateways/':
 			response.write('Discovery has found ' + devices.length + ' devices. Path Hit: ' + request.url + '\n');
 			for (let i = 0; i < devices.length; i++) {
-				response.write('' + devices[i].getIpAddressAsString() +
-					':' + devices[i].getPortAsString() +
-					' [' + devices[i].getMacAddressAsString() + ']\n');
+				response.write('' + devices[i].getIpAddressAsString() 
+					+ ':' 
+					+ devices[i].getPortAsString() 
+					+ ' [' 
+					+ devices[i].getMacAddressAsString() 
+					+ '] ' 
+					+ (devices[i].isNewFirmware() ? '*' : '') 
+					+ '\n');
 			}
 			response.end ();
 			break;
