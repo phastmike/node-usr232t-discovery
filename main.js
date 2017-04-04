@@ -7,7 +7,7 @@
  * 
  * Copyright (C) 2017 José Miguel Fonte <pmikepublic [AT] gmail [DOT] com> 
  */
-var app = require('express');
+
 var Discovery = require('./discovery.js');
 var discovery = new Discovery();
 

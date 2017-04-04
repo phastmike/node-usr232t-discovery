@@ -32,7 +32,7 @@ Discoverable.prototype.getMacAddressAsString = function () {
 };
 
 Discoverable.prototype.getIpAddressAsString = function () {
-	var string = '' + this.raw[16];
+	let string = '' + this.raw[16];
 	string += "." + this.raw[15];
 	string += "." + this.raw[14];
 	string += "." + this.raw[13];
@@ -40,7 +40,7 @@ Discoverable.prototype.getIpAddressAsString = function () {
 };
 
 Discoverable.prototype.getPortAsString = function () {
-	return (this.raw[18] << 8) + this.raw[17];
+	return ((this.raw[18] << 8) + this.raw[17]).toString();
 }
 
 Discoverable.prototype.isNewFirmware = function () {
