@@ -8,7 +8,8 @@
  * Copyright (C) 2017 José Miguel Fonte <pmikepublic [AT] gmail [DOT] com> 
  */
 
-var http = require('http');
+const http = require('http');
+const url = require('url');
 var server_web = undefined;
 var server_port = 0;
 var devices = [];
@@ -28,6 +29,12 @@ function handleRequest(request, response) {
 					+ (devices[i].isNewFirmware() ? '*' : '') 
 					+ '\n');
 			}
+			response.end ();
+			break;
+		case '/gateways/json':
+		case '/gateways/json/':
+			let serializedObjects = JSON.stringify (devices)
+			response.write (serializedObjects);
 			response.end ();
 			break;
 		default:
