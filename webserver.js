@@ -21,16 +21,16 @@ function getDevicesAsJson() {
 function getDevicesAsText() {
     let output = 'Discovery has found ' + devices.length + ' devices.\n';
 
-	for (let i = 0; i < devices.length; i++) {
-	    output = output + devices[i].getIpAddressAsString()
-		    + ':'
-			+ devices[i].getPortAsString()
-			+ ' ['
-			+ devices[i].getMacAddressAsString()
-			+ '] '
-			+ (devices[i].isNewFirmware() ? '*' : '')
-			+ '\n';
-	}
+    for (let i = 0; i < devices.length; i++) {
+        output = output + devices[i].getIpAddressAsString()
+            + ':'
+            + devices[i].getPortAsString()
+            + ' ['
+            + devices[i].getMacAddressAsString()
+            + '] '
+            + (devices[i].isNewFirmware() ? '*' : '')
+            + '\n';
+    }
 
     return output;
 }
@@ -46,36 +46,36 @@ function getDevicesWithFormat(format) {
 
 function handleRequest(request, response) {
     let req = url.parse(request.url.toLowerCase(), true)
-	switch (req.pathname) {
-		case '/gateways':
-		case '/gateways/':
+    switch (req.pathname) {
+        case '/gateways':
+        case '/gateways/':
             response.write(getDevicesWithFormat(req.query.format));
-			response.end ();
-			break;
-		case '/gateways/json':
-		case '/gateways/json/':
-			response.write (getDevicesAsJson());
-			response.end ();
-			break;
-		default:
-			response.end ('404 - ' + request.url + ' Not found');
-			break;
-	}
+            response.end ();
+            break;
+        case '/gateways/json':
+        case '/gateways/json/':
+            response.write (getDevicesAsJson());
+            response.end ();
+            break;
+        default:
+            response.end ('404 - ' + request.url + ' Not found');
+        break;
+    }
 }
 
 module.exports = WebServer;
 
 function WebServer(port) {
-	server_port = port;
-	server_web = http.createServer(handleRequest);
+    server_port = port;
+    server_web = http.createServer(handleRequest);
 };
 
 WebServer.prototype.start = function () {
-	server_web.listen(server_port, function() {
-		console.log ("Server Web on : http://localhost:%s", server_port);
-	});
+    server_web.listen(server_port, function() {
+        console.log ("Server Web on : http://localhost:%s", server_port);
+    });
 };
 
 WebServer.prototype.set_devices = function (ds) {
-	devices = ds;
+    devices = ds;
 }
