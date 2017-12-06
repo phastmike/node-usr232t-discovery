@@ -9,40 +9,58 @@
  */
 
 // Private
-var ip_addr = undefined;
-var ip_port = 0;
+function setMacFromRawData(raw) {
+	var string = raw.toString('hex', 0, 1);
+	string += ":" + raw.toString('hex', 1, 2);
+	string += ":" + raw.toString('hex', 2, 3);
+	string += ":" + raw.toString('hex', 3, 4);
+	string += ":" + raw.toString('hex', 4, 5);
+	string += ":" + raw.toString('hex', 5, 6);
+
+    return string;
+};
+
+function setIpAddressFromRawData(raw) {
+	var string = '' + raw[16];
+	string += "." + raw[15];
+	string += "." + raw[14];
+	string += "." + raw[13];
+
+	return string;
+};
+
+function setIpPortFromRawData(raw) {
+	return ((raw[18] << 8) + raw[17]).toString();
+}
+
+function setNewFwFromRawData(raw) {
+	return raw.length == 35;
+}
 
 // Public
 module.exports = Discoverable;
 
 function Discoverable(address, port, raw_message) {
 	this.raw = new Buffer.from (raw_message);
-	ip_addr  = address;
-	ip_port  = port;
+
+    this.mac_addr = setMacFromRawData(this.raw);
+    this.ip_addr = setIpAddressFromRawData(this.raw);
+    this.ip_port = setIpPortFromRawData(this.raw);
+    this.nufw = setNewFwFromRawData(this.raw);
 }
 
 Discoverable.prototype.getMacAddressAsString = function () {
-	var string = this.raw.toString('hex', 0, 1);
-	string += ":" + this.raw.toString('hex', 1, 2);
-	string += ":" + this.raw.toString('hex', 2, 3);
-	string += ":" + this.raw.toString('hex', 3, 4);
-	string += ":" + this.raw.toString('hex', 4, 5);
-	string += ":" + this.raw.toString('hex', 5, 6);
-	return string;
+	return this.mac_addr;
 };
 
 Discoverable.prototype.getIpAddressAsString = function () {
-	let string = '' + this.raw[16];
-	string += "." + this.raw[15];
-	string += "." + this.raw[14];
-	string += "." + this.raw[13];
-	return string;
+    return this.ip_addr;
 };
 
 Discoverable.prototype.getPortAsString = function () {
-	return ((this.raw[18] << 8) + this.raw[17]).toString();
+    return this.ip_port;
 }
 
 Discoverable.prototype.isNewFirmware = function () {
-	return this.raw.length == 35;
+	return this.nufw;
 }
