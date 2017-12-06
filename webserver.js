@@ -14,27 +14,47 @@ var server_web = undefined;
 var server_port = 0;
 var devices = [];
 
+function getDevicesAsJson() {
+    return JSON.stringify (devices);
+}
+
+function getDevicesAsText() {
+    let output = 'Discovery has found ' + devices.length + ' devices.\n';
+
+	for (let i = 0; i < devices.length; i++) {
+	    output = output + devices[i].getIpAddressAsString()
+		    + ':'
+			+ devices[i].getPortAsString()
+			+ ' ['
+			+ devices[i].getMacAddressAsString()
+			+ '] '
+			+ (devices[i].isNewFirmware() ? '*' : '')
+			+ '\n';
+	}
+
+    return output;
+}
+
+function getDevicesWithFormat(format) {
+    switch (format) {
+        case 'json':
+            return getDevicesAsJson();
+        default:
+            return getDevicesAsText();
+    }
+}
+
 function handleRequest(request, response) {
-	switch (request.url.toLowerCase()) {
+    let req = url.parse(request.url.toLowerCase(), true)
+	switch (req.pathname) {
 		case '/gateways':
 		case '/gateways/':
-			response.write('Discovery has found ' + devices.length + ' devices. Path Hit: ' + request.url + '\n');
-			for (let i = 0; i < devices.length; i++) {
-				response.write('' + devices[i].getIpAddressAsString() 
-					+ ':' 
-					+ devices[i].getPortAsString() 
-					+ ' [' 
-					+ devices[i].getMacAddressAsString() 
-					+ '] ' 
-					+ (devices[i].isNewFirmware() ? '*' : '') 
-					+ '\n');
-			}
+            response.write(getDevicesWithFormat(req.query.format));
 			response.end ();
 			break;
 		case '/gateways/json':
 		case '/gateways/json/':
-			let serializedObjects = JSON.stringify (devices)
-			response.write (serializedObjects);
+			response.write (getDevicesAsJson());
 			response.end ();
 			break;
 		default:
