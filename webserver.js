@@ -73,6 +73,7 @@ function WebServer(port) {
 WebServer.prototype.start = function () {
     server_web.listen(server_port, function() {
         console.log ("Server Web on : http://localhost:%s", server_port);
+        console.log ("Endpoints: /gateways and /gateways/json/");
     });
 };
 
